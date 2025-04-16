@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CyberNest - CTF Tools</title>
+    <style>
+        body { background: #121212; color: cyan; font-family: sans-serif; padding: 20px; }
+        h1 { color: cyan; }
+        .tool-card { background: #1e1e1e; padding: 20px; margin: 20px 0; border-radius: 12px; box-shadow: 0 0 10px cyan55; border: 2px solid cyan; box-shadow: 0 0 15px cyan;}
+        textarea, select { width: 100%; padding: 10px; background: #2a2a2a; color: white; border: none; border-radius: 8px; margin-bottom: 10px; }
+        button { background: cyan; color: black; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; }
+        .output-box { background: #292929; padding: 10px; border-radius: 8px; margin-top: 10px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+<div style="padding: 1rem;"><a href="/" style="color:white;font-weight:bold;text-decoration:none;">⬅️Back to Home</a></div>
+<h1>CTF Helper Tools</h1>
+
+<div class="tool-card">
+    <h2>Base Detector</h2>
+    <form method="POST" action="/ctf/base-detector">
+        <textarea name="encoded_text" rows="5" placeholder="Paste encoded text...">{{ encoded_input }}</textarea>
+        <button type="submit">Detect Base</button>
+    </form>
+    {% if base_result %}
+    <div class="output-box">
+        <h4>Detected:</h4>
+        <ul>{% for result in base_result %}<li>{{ result }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+</div>
+
+<div class="tool-card">
+    <h2>Decoder</h2>
+    <form method="POST" action="/ctf/decode">
+        <textarea name="input_text" rows="5" placeholder="Encoded text...">{{ input_text }}</textarea>
+        <select name="encoding">
+            <option value="">Select Encoding</option>
+            {% for enc in ['base64', 'base32', 'base16', 'hex', 'binary'] %}
+                <option value="{{ enc }}" {% if selected_encoding == enc %}selected{% endif %}>{{ enc|upper }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Decode</button>
+    </form>
+    {% if decode_result %}
+    <div class="output-box"><h4>Decoded Output:</h4><code>{{ decode_result }}</code></div>
+    {% endif %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Chatbot UI -->
+<style>
+#chatbot-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ff4c4c;
+    background: #1f1f1f;
+    border: 2px solid #ff4c4c;
+    box-shadow: 0 0 15px #ff4c4c;
+    z-index: 1000;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#chatbot-toggle:hover {
+    box-shadow: 0 0 25px #ff4c4c, 0 0 35px #ff4c4c;
+}
+
+#chatbot-box {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    background: #1e1e1e;
+    color: white;
+    border-radius: 10px;
+    border: 2px solid #ff4c4c;
+    padding: 10px;
+    box-shadow: 0 0 15px #ff4c4c;
+    z-index: 999;
+}
+#chatbot-box h4 {
+    margin: 0 0 10px;
+}
+#chatbot-form {
+    display: flex;
+    gap: 6px;
+}
+#chatbot-input {
+    flex-grow: 1;
+    padding: 6px;
+    border: none;
+    border-radius: 5px;
+}
+#chatbot-send {
+    background: #ff4c4c;
+    color: black;
+    font-weight: bold;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#chatbot-response {
+    margin-top: 10px;
+    font-size: 14px;
+}
+</style>
+
+<div id="chatbot-box">
+    <h4>Ask CyberNest 🤖</h4>
+    <div id="chatbot-form">
+        <input type="text" id="chatbot-input" placeholder="Ask a question..." />
+        <button id="chatbot-send" onclick="chatbotReply()">➤</button>
+    </div>
+    <div id="chatbot-response"></div>
+</div>
+<button id="chatbot-toggle" onclick="toggleChatbot()">🤖</button>
+
+<script>
+let chatbotData = {};
+fetch('/static/chatbot_qa.json')
+    .then(response => response.json())
+    .then(data => chatbotData = data)
+    .catch(err => console.error("Chatbot Q&A failed to load:", err));
+
+function toggleChatbot() {
+    const box = document.getElementById('chatbot-box');
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+function chatbotReply() {
+    const input = document.getElementById('chatbot-input');
+    const responseBox = document.getElementById('chatbot-response');
+    const question = input.value.trim().toLowerCase();
+
+    let answer = chatbotData[question];
+    if (!answer) {
+        for (const key in chatbotData) {
+            if (question.includes(key) || key.includes(question)) {
+                answer = chatbotData[key];
+                break;
+            }
+        }
+    }
+
+    responseBox.innerText = answer || "Sorry, I don't know that yet.";
+    input.value = '';
+}
+
+document.getElementById('chatbot-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') chatbotReply();
+});
+</script>
+
+</body>
+</html>
