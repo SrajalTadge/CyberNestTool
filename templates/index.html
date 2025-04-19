@@ -8,11 +8,11 @@
     html, body {
       height: 100%;
       margin: 0;
-      display: flex;
-      flex-direction: column;
       font-family: 'JetBrains Mono', monospace;
       background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
       color: white;
+      display: flex;
+      flex-direction: column;
     }
 
     main {
@@ -45,7 +45,6 @@
 
     .tool-card {
       background: rgba(255, 255, 255, 0.05);
-      border: 2px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       padding: 30px;
       width: 280px;
@@ -67,6 +66,9 @@
     .forensics { border: 2px solid tomato; }
     .forensics:hover { box-shadow: 0 0 20px tomato; }
 
+    .tools { border: 2px solid #4cff79; }
+    .tools:hover { box-shadow: 0 0 20px #4cff79; }
+
     .tool-card a {
       display: inline-block;
       margin-top: 15px;
@@ -83,6 +85,17 @@
       color: black;
     }
 
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    footer a {
+      color: #ff4c4c;
+      text-decoration: none;
+    }
+
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -92,163 +105,44 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: white;
-      font-size: 14px;
-    }
-
-    footer a {
-      color: #ff4c4c;
-      text-decoration: none;
-    }
   </style>
 </head>
 <body>
 
-  <main>
-    <h1>🔐 CyberNest</h1>
-    <p>Your All-in-One Cybersecurity Toolkit</p>
-    <div class="tools-container">
-      <div class="tool-card ctf">
-        <h2>CTF Helpers</h2>
-        <p>Decode Base64, ROT13, Base58 and more</p>
-        <a href="/ctf">Launch</a>
-      </div>
-      <div class="tool-card crypto">
-        <h2>Cryptography</h2>
-        <p>Custom Encryption & Secure Decryption</p>
-        <a href="/crypto">Launch</a>
-      </div>
-      <div class="tool-card forensics">
-        <h2>Digital Forensics</h2>
-        <p>Analyze Metadata from Uploaded Files</p>
-        <a href="/forensics">Launch</a>
-      </div>
+<main>
+  <h1>🔐 CyberNest</h1>
+  <p>Your All-in-One Cybersecurity Toolkit</p>
+  <div class="tools-container">
+    <div class="tool-card ctf">
+      <h2>CTF Helpers</h2>
+      <p>Decode Base64, ROT13, Base58 and more</p>
+      <a href="/ctf">Launch</a>
     </div>
-  </main>
-
-  <!-- Chatbot UI -->
-  <style>
-    #chatbot-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border: none;
-      border-radius: 50%;
-      font-size: 28px;
-      font-weight: bold;
-      color: #ff4c4c;
-      background: #1f1f1f;
-      border: 2px solid #ff4c4c;
-      box-shadow: 0 0 15px #ff4c4c;
-      z-index: 1000;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #chatbot-toggle:hover {
-      box-shadow: 0 0 25px #ff4c4c, 0 0 35px #ff4c4c;
-    }
-
-    #chatbot-box {
-      display: none;
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 300px;
-      background: #1e1e1e;
-      color: white;
-      border-radius: 10px;
-      border: 2px solid #ff4c4c;
-      padding: 10px;
-      box-shadow: 0 0 15px #ff4c4c;
-      z-index: 999;
-    }
-    #chatbot-box h4 {
-      margin: 0 0 10px;
-    }
-    #chatbot-form {
-      display: flex;
-      gap: 6px;
-    }
-    #chatbot-input {
-      flex-grow: 1;
-      padding: 6px;
-      border: none;
-      border-radius: 5px;
-    }
-    #chatbot-send {
-      background: #ff4c4c;
-      color: black;
-      font-weight: bold;
-      padding: 6px 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #chatbot-response {
-      margin-top: 10px;
-      font-size: 14px;
-    }
-  </style>
-
-  <div id="chatbot-box">
-    <h4>Ask CyberNest 🤖</h4>
-    <div id="chatbot-form">
-      <input type="text" id="chatbot-input" placeholder="Ask a question..." />
-      <button id="chatbot-send" onclick="chatbotReply()">➤</button>
+    <div class="tool-card crypto">
+      <h2>Cryptography</h2>
+      <p>Custom Encryption & Secure Decryption</p>
+      <a href="/crypto">Launch</a>
     </div>
-    <div id="chatbot-response"></div>
+    <div class="tool-card forensics">
+      <h2>Digital Forensics</h2>
+      <p>Image Steganography & EXIF Metadata</p>
+      <a href="/forensics">Launch</a>
+    </div>
+    <div class="tool-card tools">
+      <h2>Forensic Analyzer</h2>
+      <p>Hex Editor & Analyze Metadata</p>
+      <a href="/tools">Launch</a>
+    </div>
   </div>
-  <button id="chatbot-toggle" onclick="toggleChatbot()">🤖</button>
+</main>
 
-  <script>
-    let chatbotData = {};
-    fetch('/static/chatbot_qa.json')
-      .then(response => response.json())
-      .then(data => chatbotData = data)
-      .catch(err => console.error("Chatbot Q&A failed to load:", err));
-
-    function toggleChatbot() {
-      const box = document.getElementById('chatbot-box');
-      box.style.display = box.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function chatbotReply() {
-      const input = document.getElementById('chatbot-input');
-      const responseBox = document.getElementById('chatbot-response');
-      const question = input.value.trim().toLowerCase();
-
-      let answer = chatbotData[question];
-      if (!answer) {
-        for (const key in chatbotData) {
-          if (question.includes(key) || key.includes(question)) {
-            answer = chatbotData[key];
-            break;
-          }
-        }
-      }
-
-      responseBox.innerText = answer || "Sorry, I don't know that yet.";
-      input.value = '';
-    }
-
-    document.getElementById('chatbot-input').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') chatbotReply();
-    });
-  </script>
+<!-- ✅ Floating Chatbot Included -->
+{% include 'chatbot.html' %}
 
 <footer>
-    © 2025 CyberNest. All rights reserved.<br>
-    Made with ❤️ by CyberNest Team. | CyberNest v1.0
-  </footer>
-  
+  © 2025 CyberNest. All rights reserved.<br>
+  Made with ❤️ by CyberNest Team. | CyberNest v1.0
+</footer>
 
 </body>
 </html>
